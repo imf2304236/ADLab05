@@ -164,4 +164,22 @@ public class BST <Key extends Comparable<Key>, Value>
         System.out.println(x.key);
         visit(x.right);
     }
+
+    public static void main(String[] args)
+    {
+        String[] words = {"it", "was", "the", "best", "of", "times", "yet"};
+        BST<String, Integer> tree = new BST<String, Integer>();
+
+        for (int i = 0; i < words.length; i++)
+        {
+            tree.put(words[i], i);
+        }
+
+        Iterator<String> iterator = tree.iterator();
+
+        while(iterator.hasNext())
+        {
+            System.out.println(iterator.next());
+        }
+    }
 }
