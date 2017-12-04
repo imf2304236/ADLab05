@@ -2,29 +2,32 @@ import java.util.Iterator;
 import java.util.Stack;
 
 /**
- * ADLab05
- * Created by IF on 04.12.17.
+ * Implementation of the Binary Search Tree abstract data structure
+ * which stores Strings and key-value pairs as a linked list.
  */
-public class BST <Key extends Comparable<Key>, Value>
+public class BST
 {
     private Node root;
 
+    /**
+     * Inner class which models the abstract data structure of a binary node
+     */
     private class Node
     {
-        private Key key;
-        private Value val;
+        private String key;
+        private int val;
         private Node left, right;
-//        private int N;
 
-//        public Node(Key key, Value val, int N) {
-        public Node(Key key, Value val) {
-            this.key = key;
-            this.val = val;
-//            this.N = N;
+        public Node(String k, int value) {
+            key = k;
+            val = value;
         }
     }
 
-    private class BSTIterator implements Iterator<Key>
+    /**
+     * Inner class which iterates over the keys in a Binary Search Tree in order
+     */
+    private class BSTIterator implements Iterator<String>
     {
         private Stack<Node> stack = new Stack<>();
 
@@ -37,17 +40,28 @@ public class BST <Key extends Comparable<Key>, Value>
             }
         }
 
+        /**
+         * Stores keys a Binary Search tree in order
+         */
         BSTIterator()
         {
             pushLeft(root);
         }
 
+        /**
+         * Checks whether the iterator has reached the end of the tree's ordered key list
+         * @return Boolean true if a larger key than the previously iterated key exists
+         */
         public boolean hasNext()
         {
             return !stack.isEmpty();
         }
 
-        public Key next()
+        /**
+         * Returns the next key in the tree's ordered key list
+         * @return The next key in the tree's ordered key list
+         */
+        public String next()
         {
             Node x = stack.pop();
             pushLeft(x.right);
@@ -55,42 +69,12 @@ public class BST <Key extends Comparable<Key>, Value>
         }
     }
 
-/*
-    public int size()
-    {
-        return size(root);
-    }
-*/
-
-/*
-    private int size(Node x)
-    {
-        if (x == null) return 0;
-        else           return x.N;
-    }
-*/
-
-/*
-    public Value get(Key key)
-    {
-        return get(root, key);
-    }
-*/
-
-/*
-    private Value get(Node x, Key key)
-    {
-        if (x == null) return null;
-
-        int cmp = key.compareTo(x.key);
-
-        if      (cmp < 0) return get(x.left, key);
-        else if (cmp > 0) return get(x.right, key);
-        else              return x.val;
-    }
-*/
-
-    private Value get(Key key)
+    /**
+     *
+     * @param key
+     * @return
+     */
+    public Integer get(String key)
     {
         Node x = root;
 
@@ -108,29 +92,11 @@ public class BST <Key extends Comparable<Key>, Value>
     /**
      *
      * @param key
-     * @param val
      */
-    public void put(Key key, Value val)
+    public void put(String key)
     {
-        root = put(root, key, val);
+        root = put(root, key, 0);
     }
-
-/*
-    private Node put(Node x, Key key, Value val)
-    {
-        if (x == null) return new Node(key, val, 1);
-
-        int cmp = key.compareTo(x.key);
-
-        if      (cmp < 0) x.left  = put(x.left, key, val);
-        else if (cmp > 0) x.right = put(x.right, key, val);
-        else              x.val = val;
-
-        x.N = size(x.left) + size(x.right) + 1;
-
-        return x;
-    }
-*/
 
     /**
      *
@@ -139,11 +105,12 @@ public class BST <Key extends Comparable<Key>, Value>
      * @param val
      * @return
      */
-    private Node put(Node x, Key key, Value val)
+    private Node put(Node x, String key, Integer val)
     {
         if (x == null) return new Node(key, val);
 
         int cmp = key.compareTo(x.key);
+        val++;
 
         if      (cmp < 0) x.left  = put(x.left, key, val);
         else if (cmp > 0) x.right = put(x.right, key, val);
@@ -152,11 +119,19 @@ public class BST <Key extends Comparable<Key>, Value>
         return x;
     }
 
-    public Iterator<Key> iterator()
+    /**
+     *
+     * @return
+     */
+    public Iterator<String> iterator()
     {
         return new BSTIterator();
     }
 
+    /**
+     *
+     * @param x
+     */
     public void visit(Node x)
     {
         if (x == null) return;
@@ -168,18 +143,19 @@ public class BST <Key extends Comparable<Key>, Value>
     public static void main(String[] args)
     {
         String[] words = {"it", "was", "the", "best", "of", "times", "yet"};
-        BST<String, Integer> tree = new BST<String, Integer>();
+        BST tree = new BST();
 
-        for (int i = 0; i < words.length; i++)
+        for (String word : words)
         {
-            tree.put(words[i], i);
+            tree.put(word);
         }
 
         Iterator<String> iterator = tree.iterator();
 
         while(iterator.hasNext())
         {
-            System.out.println(iterator.next());
+            String next = iterator.next();
+            System.out.println(next + " : " + tree.get(next));
         }
     }
 }
