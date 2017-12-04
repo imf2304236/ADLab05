@@ -1,3 +1,6 @@
+import java.util.Iterator;
+import java.util.Stack;
+
 /**
  * ADLab05
  * Created by IF on 04.12.17.
@@ -18,6 +21,37 @@ public class BST <Key extends Comparable<Key>, Value>
             this.key = key;
             this.val = val;
 //            this.N = N;
+        }
+    }
+
+    private class BSTIterator implements Iterator<Key>
+    {
+        private Stack<Node> stack = new Stack<>();
+
+        private void pushLeft(Node x)
+        {
+            while (x != null)
+            {
+                stack.push(x);
+                x = x.left;
+            }
+        }
+
+        BSTIterator()
+        {
+            pushLeft(root);
+        }
+
+        public boolean hasNext()
+        {
+            return !stack.isEmpty();
+        }
+
+        public Key next()
+        {
+            Node x = stack.pop();
+            pushLeft(x.right);
+            return x.key;
         }
     }
 
@@ -116,5 +150,18 @@ public class BST <Key extends Comparable<Key>, Value>
         else              x.val = val;
 
         return x;
+    }
+
+    public Iterator<Key> iterator()
+    {
+        return new BSTIterator();
+    }
+
+    public void visit(Node x)
+    {
+        if (x == null) return;
+        visit(x.left);
+        System.out.println(x.key);
+        visit(x.right);
     }
 }
